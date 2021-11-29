@@ -1,0 +1,26 @@
+services: 
+  mongodb: 
+    environment: 
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+    image: mongo
+    ports: 
+      - "27017:27017"
+    volumes:
+      - mongodb-data:/data/db
+  mongo-client: 
+    environment: 
+      - "ME_CONFIG_MONGODB_ADMINUSERNAME=root"
+      - "ME_CONFIG_MONGODB_ADMINPASSWORD=root"
+      - "ME_CONFIG_MONGODB_PORT=27017"
+      - "ME_CONFIG_MONGODB_SERVER=mongodb"
+    image: mongo-express
+    ports: 
+      - "8090:8081"
+    depends_on: 
+      - "mongodb"
+    restart: unless-stopped
+volumes: 
+  mongodb-data:
+    driver: local
+version: "3"
